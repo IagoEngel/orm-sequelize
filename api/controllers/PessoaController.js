@@ -60,15 +60,27 @@ class PessoaController {
         }
     }
 
+    static async restauraPessoa(req, res) {
+        const { id } = req.params;
+
+        try {
+            await database.Pessoas.restore({ where: { id: Number(id) } });
+
+            return res.status(200).json({ mensagem: `id ${id} restaurado` });
+        } catch (error) {
+            return res.status(500).json(error.message);
+        }
+    }
+
     static async pegaMatricula(req, res) {
         const { estudanteId, matriculaId } = req.params;
 
         try {
-            const matricula = await database.Matriculas.findOne({ 
-                where: { 
-                    id: Number(matriculaId), 
+            const matricula = await database.Matriculas.findOne({
+                where: {
+                    id: Number(matriculaId),
                     estudante_id: Number(estudanteId)
-                } 
+                }
             });
 
             return res.status(200).json(matricula);
@@ -99,11 +111,11 @@ class PessoaController {
         const novosDados = req.body;
 
         try {
-            await database.Matriculas.update(novosDados, { 
-                where: { 
-                    id: Number(matriculaId), 
+            await database.Matriculas.update(novosDados, {
+                where: {
+                    id: Number(matriculaId),
                     estudante_id: Number(estudanteId)
-                } 
+                }
             });
             const matriculaAtualizada = await database.Matriculas.findOne({ where: { id: Number(matriculaId) } });
 
