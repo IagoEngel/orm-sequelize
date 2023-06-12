@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'docente_id'
       }) //se não colocasse o foreignKey, o sequelize iria criar assim: PessoaId
       Pessoas.hasMany(models.Matriculas, {
-        foreignKey: 'estudante_id'
+        foreignKey: 'estudante_id',
+        scope: { status: 'confirmado' },
+        as: 'aulasMatriculadas'
+        // ^ escopo de associação
       })
     }
   }
